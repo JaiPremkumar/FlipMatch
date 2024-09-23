@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin:0 ;
+            padding: auto;
+            box-sizing: border-box;
+            font-family: monospace;
+        }
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: rgb(71, 130, 197);
+        }
+        .container{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            background: rgb(169, 223, 240);
+            padding: 40px 60px;
+        }
+        h2{
+            font-size: 3rem;
+            color: #291ce0;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .btn{
+            padding: 15px 20px;
+            color: rgb(238, 234, 228);
+            background: rgb(226, 29, 29);
+            border: none;
+            font-size: 1.5em;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 30px;
+        }
+        .gameDiv{
+            width: 440px;
+            height: 440px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            transform-style: preserve-3d;
+            perspective: 500px;
+        }
+        @media screen and (max-width:600px) {
+            .gameDiv{
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, auto);
+            gap: 10px;
+            transform-style: preserve-3d;
+            perspective: 500px;
+            
+        }
+        h2{
+              font-size: 2rem;
+            color: #291ce0;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        }
+        .items{
+            position: relative;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            background: #fff;
+            transition: 0.8s;
+        }
+        .items::after{
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgb(12, 101, 160);
+            transition: 0.8s;
+            transform: rotateY(0deg);
+            backface-visibility: hidden;
+        }
+        .items.boxOpen{
+          transform: rotateY(0deg);
+        }
+        .boxOpen:after,
+        .boxMatch:after{
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Flip Gamez...</h2>
+        <div class="gameDiv"></div>
+        <button class="btn" onclick="window.location.reload()">Reset</button>
+    </div>
+    <script>
+        const nbr=[1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8]
+        var shufNbr = nbr.sort(()=>(Math.random() > .5)? 2:-1);
+        for(var i=0;i<nbr.length;i++){
+            let box = document.createElement('div');
+            box.className = 'items';
+            box.innerHTML = shufNbr[i]
+            box.onclick = function(){
+                this.classList.add('boxOpen')
+                setTimeout(function(){
+                    if(document.querySelectorAll('.boxOpen').length>1){
+                        if(document.querySelectorAll('.boxOpen')[0].innerHTML ==
+                        document.querySelectorAll('.boxOpen')[1].innerHTML){
+                            document.querySelectorAll('.boxOpen')[0].classList.add('boxMatch')
+                            document.querySelectorAll('.boxOpen')[1].classList.add('boxMatch')
+
+                            document.querySelectorAll('.boxOpen')[1].classList.remove('boxOpen')
+                            document.querySelectorAll('.boxOpen')[0].classList.remove('boxOpen')
+
+                            if(document.querySelectorAll('.boxMatch').length == nbr.length){
+                                alert("winner")
+                            }
+
+                        }else{
+                            document.querySelectorAll('.boxOpen')[1].classList.remove('boxOpen')
+                            document.querySelectorAll('.boxOpen')[0].classList.remove('boxOpen')
+                        }
+                    }
+                },500)
+            }
+            document.querySelector('.gameDiv').appendChild(box);
+
+        }
+    </script>
+</body>
+</html>
